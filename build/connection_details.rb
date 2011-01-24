@@ -1,6 +1,5 @@
 class DbDetails 
-  attr_reader :initial_catalog,:database_provider,:web_user_account,:server_name, :sql_tools_path, :osql_exe , :osql_connection_string, :database_path, :osql_args_prior_to_file_name
-, :config_connectionstring
+  attr_reader :initial_catalog,:database_provider,:web_user_account,:server_name, :sql_tools_path, :osql_exe , :osql_connection_string, :database_path, :osql_args_prior_to_file_name , :config_connectionstring
 
   def initialize
       initialize_db_details

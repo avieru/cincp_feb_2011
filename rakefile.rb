@@ -66,14 +66,20 @@ namespace :specs do
 
   desc 'run the specs for the project'
   task :run  => [:init,:compile] do
+    Dir.glob(File.join('thirdparty','machine.specifications','*')).each do|file|
+      FileUtils.cp(file,'artifacts')
+    end
+    Project.spec_assemblies.each do |assembly|
+        app_config.generate_to(File.join('artifacts',"#{File.basename(assembly)}.config"),local_settings.settings)
+    end
     sh "artifacts/mspec.exe", "--html", "#{Project.report_folder}/#{Project.name}.specs.html", "-x", "example", *([] + Project.spec_assemblies)
   end
 end
 
 desc "open the solution"
 task :sln do
-path = "devenv #{solution_file}"
-  Thread.new do
-    system path
-  end
+  path = "devenv #{solution_file}"
+    Thread.new do
+      system path
+    end
 end
