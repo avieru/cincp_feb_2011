@@ -1,15 +1,12 @@
-
 class SqlRunner
-  def initialize(settings = Hash.new("Not found"))
-    @sql_tool = settings.fetch(:sql_tool,File.join(ENV['SYSTEMDRIVE'],'program files','microsoft sql server','100','tools','binn','osql.exe'))
-    @command_line_args = settings.fetch(:command_line_args, '-b -i')
-    @connection_string = settings.fetch(:connection_string,"-E")
+  def initialize(db_details)
+    @db_details = db_details
   end
 
   def process_sql_files(files)
       files.each do|file|
         begin
-            sh "#{@sql_tool} #{@connection_string} #{@command_line_args} #{file}"
+            sh "#{@db_details.osql_exe} #{@db_details.osql_connection_string} #{@db_details.osql_args_prior_to_file_name} #{file}"
         rescue 
           puts("Error processing sql file:#{file}")
           raise
@@ -19,11 +16,19 @@ class SqlRunner
 end
 
 class LocalSettings
-  attr_reader :settings
+  attr_reader :settings,:db_details
+  
 
   def [](setting)
     @settings[setting]
   end
+
+  def initialize(db_details)
+    @db_details = db_details
+    @settings = create_settings_dictionary
+    @db_details.populate(@settings)
+  end
+
 
   def each_pair
     @settings.each_key do|key,value|
