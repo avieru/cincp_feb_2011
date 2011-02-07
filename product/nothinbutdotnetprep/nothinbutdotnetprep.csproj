@@ -51,6 +51,7 @@
     <Compile Include="collections\ReadonlySetOf.cs" />
     <Compile Include="infrastructure\Condition.cs" />
     <Compile Include="infrastructure\searching\AnonymousCriteria.cs" />
+    <Compile Include="infrastructure\searching\Where.cs" />
     <Compile Include="infrastructure\searching\Criteria.cs" />
     <Compile Include="infrastructure\EnumerableExtensions.cs" />
     <Compile Include="infrastructure\searching\CriteriaExtensions.cs" />
