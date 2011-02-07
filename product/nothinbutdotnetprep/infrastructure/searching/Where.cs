@@ -32,7 +32,20 @@ namespace nothinbutdotnetprep.infrastructure.searching
 
         public Criteria<ItemToFilter> equal_to_any(params PropertyType[] possible_values_to_equal)
         {
-            throw new NotImplementedException();
+            AnonymousCriteria<ItemToFilter> criteria= null;
+            var idx = 1;
+            foreach (var possible_value in possible_values_to_equal)
+            {
+                if (idx == 1)
+                {
+                    criteria =
+                        new AnonymousCriteria<ItemToFilter>(item => property_accessor(item).Equals(possible_value));
+                    idx++;
+                    continue;
+                }
+                criteria.or(new AnonymousCriteria<ItemToFilter>(item => property_accessor(item).Equals(possible_value)));
+            }
+            return criteria;
         }
     }
 }
