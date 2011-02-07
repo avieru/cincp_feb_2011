@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using nothinbutdotnetprep.infrastructure;
 
 namespace nothinbutdotnetprep.collections
 {
@@ -14,17 +15,19 @@ namespace nothinbutdotnetprep.collections
 
         public IEnumerable<Movie> all_movies()
         {
-            return movies;
+            return movies.one_at_a_time();
         }
 
         public void add(Movie movie)
         {
-            foreach (Movie m in all_movies())
-            {
-                if (m.title == movie.title)
-                    return;
-            }
+            if (already_contains(movie)) return;
+
             movies.Add(movie);
+        }
+
+        bool already_contains(Movie movie)
+        {
+            return movies.Contains(movie);
         }
 
         public IEnumerable<Movie> sort_all_movies_by_title_descending
@@ -39,16 +42,16 @@ namespace nothinbutdotnetprep.collections
 
         public IEnumerable<Movie> all_movies_published_by_pixar_or_disney()
         {
-            IList<Movie> disney_movies = filter_movies_by_production_studio(ProductionStudio.Disney);
-            IList<Movie> filtered_movies = filter_movies_by_production_studio(ProductionStudio.Pixar);
-            foreach (Movie m in disney_movies)
+            var disney_movies = filter_movies_by_production_studio(ProductionStudio.Disney);
+            var pixar_movies = filter_movies_by_production_studio(ProductionStudio.Pixar);
+            foreach (var item in disney_movies)
             {
-                if (!filtered_movies.Contains(m))
-                {
-                    filtered_movies.Add(m);
-                }
+                yield return item;
             }
-            return filtered_movies;
+            foreach (var pixar_movie in pixar_movies)
+            {
+                yield return pixar_movie;
+            }
         }
 
         public IEnumerable<Movie> sort_all_movies_by_title_ascending
@@ -64,7 +67,7 @@ namespace nothinbutdotnetprep.collections
         public IEnumerable<Movie> all_movies_not_published_by_pixar()
         {
             IList<Movie> filtered_movies = new List<Movie>();
-            foreach (Movie m in all_movies())
+            foreach (var m in all_movies())
             {
                 if (!m.production_studio.Equals(ProductionStudio.Pixar))
                 {
@@ -74,22 +77,20 @@ namespace nothinbutdotnetprep.collections
             return filtered_movies;
         }
 
-        public IEnumerable<Movie> all_movies_published_after(int year)
-        {
-            return all_movies_published_between_years(year+1, DateTime.MaxValue.Year);
-        }
-
         public IEnumerable<Movie> all_movies_published_between_years(int startingYear, int endingYear)
         {
-            IList<Movie> filtered_movies = new List<Movie>();
-            foreach (Movie m in all_movies())
+            foreach (var m in all_movies())
             {
                 if ((m.date_published.Year >= startingYear) && (m.date_published.Year <= endingYear))
                 {
-                    filtered_movies.Add(m);
+                    yield return m;
                 }
             }
-            return filtered_movies;
+        }
+
+        public IEnumerable<Movie> all_movies_published_after(int year)
+        {
+            return all_movies_published_between_years(year + 1, DateTime.MaxValue.Year);
         }
 
         public IEnumerable<Movie> all_kid_movies()
@@ -105,8 +106,9 @@ namespace nothinbutdotnetprep.collections
         public IEnumerable<Movie> sort_all_movies_by_date_published_descending()
         {
             IList<Movie> sorted_movies = new List<Movie>();
-            IEnumerable<Movie> movies = all_movies();
-            DateTime maxDate = DateTime.MaxValue;
+            var movies = all_movies();
+            var maxDate = DateTime.MaxValue;
+            throw new NotImplementedException();
         }
 
         public IEnumerable<Movie> sort_all_movies_by_date_published_ascending()
@@ -114,34 +116,27 @@ namespace nothinbutdotnetprep.collections
             throw new NotImplementedException();
         }
 
-
         // Privates introduced by me.
-        private IList<Movie> filter_movies_by_genre(Genre byGenre)
+        IEnumerable<Movie> filter_movies_by_genre(Genre byGenre)
         {
-            IList<Movie> filtered_movies = new List<Movie>();
-            foreach (Movie filtered_movie in all_movies())
+            foreach (var filtered_movie in all_movies())
             {
                 if (filtered_movie.genre.Equals(byGenre))
                 {
-                    filtered_movies.Add(filtered_movie);
+                    yield return filtered_movie;
                 }
             }
-            return filtered_movies;
         }
 
-        private IList<Movie> filter_movies_by_production_studio(ProductionStudio p)
+        IEnumerable<Movie> filter_movies_by_production_studio(ProductionStudio studio)
         {
-            IList<Movie> filtered_movies = new List<Movie>();
-            foreach (Movie m in all_movies())
+            foreach (var movie in all_movies())
             {
-                if (m.production_studio.Equals(p))
+                if (movie.production_studio.Equals(studio))
                 {
-                    filtered_movies.Add(m);
+                    yield return movie;
                 }
-                
             }
-            return filtered_movies;
         }
     }
-}           
-
+}
