@@ -5,38 +5,32 @@ namespace nothinbutdotnetprep.infrastructure.searching
 {
     public delegate PropertyType PropertyAccessor<ItemToFilter, PropertyType>(ItemToFilter item);
 
-
     public class Where<ItemToFilter>
     {
-        public static SomeCriteria<ItemToFilter,PropertyType> has_a<PropertyType>(
+        public static CriteriaFactory<ItemToFilter, PropertyType> has_a<PropertyType>(
             PropertyAccessor<ItemToFilter, PropertyType> accessor)
         {
-            return new SomeCriteria<ItemToFilter,PropertyType>(accessor);
+            return new CriteriaFactory<ItemToFilter, PropertyType>(accessor);
         }
     }
 
-    public class SomeCriteria<ItemToFilter,PropertyType> : Criteria<ItemToFilter>
+    public class CriteriaFactory<ItemToFilter, PropertyType>
     {
-        readonly PropertyAccessor<ItemToFilter, PropertyType> property_accessor;
-        PropertyType _itemToCheck;
+        PropertyAccessor<ItemToFilter, PropertyType> property_accessor;
 
-        public SomeCriteria(PropertyAccessor<ItemToFilter, PropertyType> property_accessor)
+        public CriteriaFactory(PropertyAccessor<ItemToFilter, PropertyType> property_accessor)
         {
             this.property_accessor = property_accessor;
         }
 
-        public SomeCriteria<ItemToFilter, PropertyType> equal_to(PropertyType item)
+        public Criteria<ItemToFilter> equal_to(PropertyType value_to_equal)
         {
-            _itemToCheck = item;
-            return this;
+            return new AnonymousCriteria<ItemToFilter>(item =>
+                                                           property_accessor(item).Equals(value_to_equal)
+                );
         }
 
-        public bool matches(ItemToFilter item)
-        {
-            return property_accessor.Invoke(item).Equals(_itemToCheck);
-        }
-
-        public SomeCriteria<ItemToFilter,PropertyType> equal_to_any(PropertyType item)
+        public Criteria<ItemToFilter> equal_to_any(params PropertyType[] possible_values_to_equal)
         {
             throw new NotImplementedException();
         }
