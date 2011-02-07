@@ -28,5 +28,6 @@ namespace nothinbutdotnetprep.infrastructure.searching
         {
             return equal_to(value).not();
         }
+
     }
 }
