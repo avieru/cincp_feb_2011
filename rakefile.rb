@@ -32,7 +32,7 @@ solution_file = "solution.sln"
 task :default => ["specs:run"]
 
 task :init  => :clean do
-  [Project.specs_dir,Project.report_folder].each{|folder| mkdir folder if ! File.exists?(folder)}
+  [Project.startup_dir,Project.specs_dir,Project.report_folder].each{|folder| mkdir folder if ! File.exists?(folder)}
 end
 
 desc 'expands all of the template files in the project'
