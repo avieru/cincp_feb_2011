@@ -1,5 +1,4 @@
-﻿using nothinbutdotnetprep.infrastructure;
-using nothinbutdotnetprep.infrastructure.searching;
+﻿using nothinbutdotnetprep.infrastructure.searching;
 
 namespace nothinbutdotnetprep.collections
 {
