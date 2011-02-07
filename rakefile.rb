@@ -59,8 +59,7 @@ end
 
 namespace :specs do
   desc 'view the spec report'
-  task :view do
-    puts Project.report_folder
+  task :view  => [:init] do
     system "start #{Project.report_folder}/#{Project.name}.specs.html"
   end
 
