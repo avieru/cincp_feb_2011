@@ -187,21 +187,25 @@ namespace nothinbutdotnetprep.specs
 
             It should_be_able_to_find_all_movies_published_by_pixar = () =>
             {
-                var results = sut.all_movies_published_by_pixar();
+                var results = sut.all_movies_by(m => m.production_studio==ProductionStudio.Pixar);
 
                 results.ShouldContainOnly(cars, a_bugs_life);
             };
 
             It should_be_able_to_find_all_movies_published_by_pixar_or_disney = () =>
             {
-                var results = sut.all_movies_published_by_pixar_or_disney();
+                var results =
+                    sut.all_movies_by(
+                        m =>
+                            m.production_studio == ProductionStudio.Pixar ||
+                                m.production_studio == ProductionStudio.Disney);
 
                 results.ShouldContainOnly(a_bugs_life, pirates_of_the_carribean, cars);
             };
 
             It should_be_able_to_find_all_movies_not_published_by_pixar = () =>
             {
-                var results = sut.all_movies_not_published_by_pixar();
+                var results = sut.all_movies_by(m => m.production_studio != ProductionStudio.Pixar);
 
                 results.ShouldNotContain(cars, a_bugs_life);
             };
@@ -222,14 +226,13 @@ namespace nothinbutdotnetprep.specs
 
             It should_be_able_to_find_all_kid_movies = () =>
             {
-                var results = sut.all_kid_movies();
-
+                var results = sut.all_movies_by(m => m.genre == Genre.kids);
                 results.ShouldContainOnly(a_bugs_life, shrek, cars);
             };
 
             It should_be_able_to_find_all_action_movies = () =>
             {
-                var results = sut.all_action_movies();
+                var results = sut.all_movies_by(m => m.genre == Genre.action);
 
                 results.ShouldContainOnly(indiana_jones_and_the_temple_of_doom, pirates_of_the_carribean);
             };

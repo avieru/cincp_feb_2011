@@ -5,9 +5,9 @@ namespace nothinbutdotnetprep.collections
 {
     public class MovieLibrary
     {
-        IList<Movie> movies;
+        List<Movie> movies = new List<Movie>();
 
-        public MovieLibrary(IList<Movie> list_of_movies)
+        public MovieLibrary(List<Movie> list_of_movies)
         {
             this.movies = list_of_movies;
         }
@@ -19,22 +19,31 @@ namespace nothinbutdotnetprep.collections
 
         public void add(Movie movie)
         {
-            throw new NotImplementedException();
+            foreach (var existingMovie in this.movies)
+            {
+                if (existingMovie.title== movie.title)
+                    return;
+            }
+            this.movies.Add(movie);
         }
 
         public IEnumerable<Movie> sort_all_movies_by_title_descending
         {
-            get { throw new NotImplementedException(); }
-        }
+            get
+            {
+                var results = new List<Movie>();
+ 
+                foreach (var movie in this.movies)
+                {
+                    if (results.Count==0)
+                        results.Add(movie);continue;
 
-        public IEnumerable<Movie> all_movies_published_by_pixar()
-        {
-            throw new NotImplementedException();
-        }
+                    
 
-        public IEnumerable<Movie> all_movies_published_by_pixar_or_disney()
-        {
-            throw new NotImplementedException();
+                }
+                return results;                
+
+            }
         }
 
         public IEnumerable<Movie> sort_all_movies_by_title_ascending
@@ -47,29 +56,31 @@ namespace nothinbutdotnetprep.collections
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Movie> all_movies_not_published_by_pixar()
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<Movie> all_movies_published_after(int year)
         {
-            throw new NotImplementedException();
+            var results = new List<Movie>();
+            foreach (var movie in this.movies)
+            {
+                if (movie.date_published > DateTime.Parse("01/01/"+year.ToString()))
+                    results.Add(movie);
+            }
+            return results;
         }
 
         public IEnumerable<Movie> all_movies_published_between_years(int startingYear, int endingYear)
         {
-            throw new NotImplementedException();
+            var results = new List<Movie>();
+            foreach (var movie in this.movies)
+            {
+                if (movie.date_published > GetYearAsDateTime(startingYear) && movie.date_published < GetYearAsDateTime(endingYear))
+                    results.Add(movie);
+            }
+            return results;
         }
 
-        public IEnumerable<Movie> all_kid_movies()
+        DateTime GetYearAsDateTime(int endingYear)
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Movie> all_action_movies()
-        {
-            throw new NotImplementedException();
+            return DateTime.Parse("01/01/"+ endingYear);
         }
 
         public IEnumerable<Movie> sort_all_movies_by_date_published_descending()
@@ -80,6 +91,17 @@ namespace nothinbutdotnetprep.collections
         public IEnumerable<Movie> sort_all_movies_by_date_published_ascending()
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<Movie> all_movies_by(Predicate<Movie> predicate)
+        {
+            var results = new List<Movie>();
+            foreach (var movie in this.movies)
+            {
+                if (predicate.Invoke(movie))
+                    results.Add(movie);
+            }
+            return results;
         }
     }
 }
