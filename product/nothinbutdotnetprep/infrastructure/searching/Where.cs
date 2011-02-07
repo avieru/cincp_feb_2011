@@ -1,25 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace nothinbutdotnetprep.infrastructure.searching
+﻿namespace nothinbutdotnetprep.infrastructure.searching
 {
-    public class Where<T>
+    public delegate PropertyType PropertyAccessor<ItemToFilter, PropertyType>(ItemToFilter item);
+
+
+    public class Where<ItemToFilter>
     {
-        public Criteria<T> has_a(Condition<T> condition)
+        public static PropertyAccessor<ItemToFilter, PropertyType> has_a<PropertyType>(
+            PropertyAccessor<ItemToFilter, PropertyType> accessor)
         {
-            return new AnonymousCriteria<T>(condition);
+            return accessor;
         }
     }
 
-    public delegate object GetProperty()
-
-    public static class CriteriaExtentions
-    {
-        public static Criteria<T> equal_to<T>(object o)
-        {
-            return null;
-        }
-    }
 }
