@@ -1,4 +1,5 @@
 using System;
+using nothinbutdotnetprep.collections;
 
 namespace nothinbutdotnetprep.infrastructure.searching
 {
@@ -14,6 +15,15 @@ namespace nothinbutdotnetprep.infrastructure.searching
         public Criteria<ItemToFilter> greater_than(PropertyType value)
         {
             return new AnonymousCriteria<ItemToFilter>(x => accessor(x).CompareTo(value) > 0);
+        }
+
+        public Criteria<ItemToFilter> between(PropertyType firstValue, PropertyType secondValue)
+        {
+            //return  greater_than(firstValue).and(
+
+            return
+                new AnonymousCriteria<ItemToFilter>(
+                    x => accessor(x).CompareTo(firstValue) > 0 && accessor(x).CompareTo(secondValue) < 0);
         }
     }
 }
