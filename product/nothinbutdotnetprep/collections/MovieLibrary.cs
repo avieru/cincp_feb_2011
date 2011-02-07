@@ -138,5 +138,14 @@ namespace nothinbutdotnetprep.collections
                 }
             }
         }
+
+        public IEnumerable<Movie> all_movies_by(Predicate<Movie> predicate)
+        {
+            foreach (var movie in all_movies())
+            {
+                if (predicate.Invoke(movie))
+                    yield return movie;
+            }
+        }
     }
 }

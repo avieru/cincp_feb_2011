@@ -185,28 +185,30 @@ namespace nothinbutdotnetprep.specs
 
         It should_be_able_to_find_all_movies_published_by_pixar = () =>
         {
-            var results = sut.all_movies_published_by_pixar();
+            var results = sut.all_movies_by(m => m.production_studio == ProductionStudio.Pixar);
 
             results.ShouldContainOnly(cars, a_bugs_life);
         };
 
         It should_be_able_to_find_all_movies_published_by_pixar_or_disney = () =>
         {
-            var results = sut.all_movies_published_by_pixar_or_disney();
+            var results =
+                sut.all_movies_by(
+                    m => m.production_studio == ProductionStudio.Pixar || m.production_studio == ProductionStudio.Disney);
 
             results.ShouldContainOnly(a_bugs_life, pirates_of_the_carribean, cars);
         };
 
         It should_be_able_to_find_all_movies_not_published_by_pixar = () =>
         {
-            var results = sut.all_movies_not_published_by_pixar();
+            var results = sut.all_movies_by(m => m.production_studio!=ProductionStudio.Pixar);
 
             results.ShouldNotContain(cars, a_bugs_life);
         };
 
         It should_be_able_to_find_all_movies_published_after_a_certain_year = () =>
         {
-            var results = sut.all_movies_published_after(2004);
+            var results = sut.all_movies_by(m => m.date_published.Year==2004);
 
             results.ShouldContainOnly(the_ring, shrek, theres_something_about_mary);
         };
