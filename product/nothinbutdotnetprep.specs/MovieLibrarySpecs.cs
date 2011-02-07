@@ -6,6 +6,8 @@ using Machine.Specifications.DevelopWithPassion.Extensions;
 using Machine.Specifications.DevelopWithPassion.Rhino;
 using nothinbutdotnetprep.collections;
 using nothinbutdotnetprep.tests.utility;
+using nothinbutdotnetprep.infrastructure;
+using nothinbutdotnetprep.infrastructure.searching;
 
 /* The following set of Contexts (TestFixture) are in place to specify the functionality that you need to complete for the MovieLibrary class.
  * MovieLibrary is an aggregate root for the Movie class. it exposes the ability to search,sort, and iterate over all of the movies that it aggregates.
@@ -185,7 +187,10 @@ namespace nothinbutdotnetprep.specs
 
         It should_be_able_to_find_all_movies_published_by_pixar = () =>
         {
-            var results = sut.all_movies_by(m => m.production_studio == ProductionStudio.Pixar);
+            var criteria = Where<Movie>.has_a(x => x.production_studio)
+                                       .equal_to(ProductionStudio.Pixar);
+
+            var results = sut.all_movies().all_items_matching(criteria);
 
             results.ShouldContainOnly(cars, a_bugs_life);
         };
@@ -193,22 +198,21 @@ namespace nothinbutdotnetprep.specs
         It should_be_able_to_find_all_movies_published_by_pixar_or_disney = () =>
         {
             var results =
-                sut.all_movies_by(
-                    m => m.production_studio == ProductionStudio.Pixar || m.production_studio == ProductionStudio.Disney);
+                sut.all_movies().all_items_matching(Movie.is_published_by_pixar_or_disney);
 
             results.ShouldContainOnly(a_bugs_life, pirates_of_the_carribean, cars);
         };
 
         It should_be_able_to_find_all_movies_not_published_by_pixar = () =>
         {
-            var results = sut.all_movies_by(m => m.production_studio!=ProductionStudio.Pixar);
+            var results = sut.all_movies().all_items_matching(Movie.is_published_by(ProductionStudio.Pixar).not());
 
             results.ShouldNotContain(cars, a_bugs_life);
         };
 
         It should_be_able_to_find_all_movies_published_after_a_certain_year = () =>
         {
-            var results = sut.all_movies_by(m => m.date_published.Year==2004);
+            var results = sut.all_movies_matching(m => m.date_published.Year==2004);
 
             results.ShouldContainOnly(the_ring, shrek, theres_something_about_mary);
         };

@@ -37,21 +37,13 @@ namespace nothinbutdotnetprep.collections
 
         public IEnumerable<Movie> all_movies_published_by_pixar()
         {
-            return filter_movies_by_production_studio(ProductionStudio.Pixar);
+            return all_movies_matching(x => x.production_studio == ProductionStudio.Pixar);
         }
 
         public IEnumerable<Movie> all_movies_published_by_pixar_or_disney()
         {
-            var disney_movies = filter_movies_by_production_studio(ProductionStudio.Disney);
-            var pixar_movies = filter_movies_by_production_studio(ProductionStudio.Pixar);
-            foreach (var item in disney_movies)
-            {
-                yield return item;
-            }
-            foreach (var pixar_movie in pixar_movies)
-            {
-                yield return pixar_movie;
-            }
+            return all_movies_matching(x => x.production_studio == ProductionStudio.Pixar ||
+                x.production_studio == ProductionStudio.Disney);
         }
 
         public IEnumerable<Movie> sort_all_movies_by_title_ascending
@@ -66,26 +58,13 @@ namespace nothinbutdotnetprep.collections
 
         public IEnumerable<Movie> all_movies_not_published_by_pixar()
         {
-            IList<Movie> filtered_movies = new List<Movie>();
-            foreach (var m in all_movies())
-            {
-                if (!m.production_studio.Equals(ProductionStudio.Pixar))
-                {
-                    filtered_movies.Add(m);
-                }
-            }
-            return filtered_movies;
+            return all_movies_matching(x => x.production_studio != ProductionStudio.Pixar);
         }
 
         public IEnumerable<Movie> all_movies_published_between_years(int startingYear, int endingYear)
         {
-            foreach (var m in all_movies())
-            {
-                if ((m.date_published.Year >= startingYear) && (m.date_published.Year <= endingYear))
-                {
-                    yield return m;
-                }
-            }
+            return all_movies_matching(x => x.date_published.Year >= startingYear &&
+                x.date_published.Year <= endingYear);
         }
 
         public IEnumerable<Movie> all_movies_published_after(int year)
@@ -116,7 +95,14 @@ namespace nothinbutdotnetprep.collections
             throw new NotImplementedException();
         }
 
-        // Privates introduced by me.
+        public IEnumerable<Movie> all_movies_matching(Condition<Movie> condition)
+        {
+            foreach (var movie in all_movies())
+            {
+                if (condition(movie)) yield return movie;
+            }
+        }
+
         IEnumerable<Movie> filter_movies_by_genre(Genre byGenre)
         {
             foreach (var filtered_movie in all_movies())
@@ -136,15 +122,6 @@ namespace nothinbutdotnetprep.collections
                 {
                     yield return movie;
                 }
-            }
-        }
-
-        public IEnumerable<Movie> all_movies_by(Predicate<Movie> predicate)
-        {
-            foreach (var movie in all_movies())
-            {
-                if (predicate.Invoke(movie))
-                    yield return movie;
             }
         }
     }
