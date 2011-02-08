@@ -53,6 +53,7 @@
     <Compile Include="infrastructure\searching\AnonymousCriteria.cs" />
     <Compile Include="infrastructure\searching\ComparableCriteriaFactory.cs" />
     <Compile Include="infrastructure\searching\CriteriaFactory.cs" />
+    <Compile Include="infrastructure\searching\DefaultCriteriaFactory.cs" />
     <Compile Include="infrastructure\searching\DoesNotMatchAnything.cs" />
     <Compile Include="infrastructure\searching\PropertyAccessor.cs" />
     <Compile Include="infrastructure\searching\Where.cs" />
