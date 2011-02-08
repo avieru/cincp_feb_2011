@@ -1,4 +1,6 @@
-﻿namespace nothinbutdotnetprep.infrastructure.searching
+﻿using System;
+
+namespace nothinbutdotnetprep.infrastructure.searching
 {
     public class DefaultCriteriaFactory<ItemToFilter, PropertyType> : CriteriaFactory<ItemToFilter, PropertyType>
     {
@@ -22,8 +24,12 @@
 
         public Criteria<ItemToFilter> create_using(Criteria<PropertyType> raw_criteria)
         {
-            return new PropertyCriteria<ItemToFilter, PropertyType>(property_accessor,
-                                                                    raw_criteria);
+            return new PropertyCriteria<ItemToFilter, PropertyType>(property_accessor, raw_criteria);
+        }
+
+        public NegatingCriteriaFactory<ItemToFilter, PropertyType> not
+        {
+            get { return new NegatingCriteriaFactory<ItemToFilter, PropertyType>(this); }
         }
     }
 }
