@@ -24,5 +24,10 @@ namespace nothinbutdotnetprep.infrastructure.searching
                 new AnonymousCriteria<ItemToFilter>(
                     x => accessor(x).CompareTo(firstValue) >= 0 && accessor(x).CompareTo(secondValue) <= 0);
         }
+
+        public Criteria<ItemToFilter> equal_to(PropertyType item)
+        {
+            return between(item, item);
+        }
     }
 }
