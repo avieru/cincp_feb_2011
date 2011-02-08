@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace nothinbutdotnetprep.infrastructure.searching
 {
@@ -18,7 +19,7 @@ namespace nothinbutdotnetprep.infrastructure.searching
 
         public Criteria<ItemToFilter> equal_to_any(params PropertyType[] possible_values_to_equal)
         {
-            return new AnonymousCriteria<ItemToFilter>(x =>
+            return create_using(x =>
                                                            new List<PropertyType>(possible_values_to_equal).Contains(
                                                                property_accessor(x)));
         }
@@ -26,6 +27,11 @@ namespace nothinbutdotnetprep.infrastructure.searching
         public Criteria<ItemToFilter> not_equal_to(PropertyType value)
         {
             return equal_to(value).not();
+        }
+
+        public Criteria<ItemToFilter> create_using(Condition<ItemToFilter> condition)
+        {
+            return new AnonymousCriteria<ItemToFilter>(condition);
         }
     }
 }

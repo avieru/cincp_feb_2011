@@ -5,6 +5,7 @@ namespace nothinbutdotnetprep.infrastructure.searching
     public class ComparableCriteriaFactory<ItemToFilter, PropertyType> : CriteriaFactory<ItemToFilter,PropertyType> where PropertyType : IComparable<PropertyType>
     {
         PropertyAccessor<ItemToFilter, PropertyType> accessor;
+
         CriteriaFactory<ItemToFilter, PropertyType> basic;
 
         public ComparableCriteriaFactory(PropertyAccessor<ItemToFilter, PropertyType> accessor, CriteriaFactory<ItemToFilter, PropertyType> basic)
@@ -15,13 +16,13 @@ namespace nothinbutdotnetprep.infrastructure.searching
 
         public Criteria<ItemToFilter> greater_than(PropertyType value)
         {
-            return new AnonymousCriteria<ItemToFilter>(x => accessor(x).CompareTo(value) > 0);
+            return create_using(x => accessor(x).CompareTo(value) > 0);
         }
 
         public Criteria<ItemToFilter> between(PropertyType firstValue, PropertyType secondValue)
         {
             return
-                new AnonymousCriteria<ItemToFilter>(
+                create_using(
                     x => accessor(x).CompareTo(firstValue) >= 0 && accessor(x).CompareTo(secondValue) <= 0);
         }
 
@@ -38,6 +39,11 @@ namespace nothinbutdotnetprep.infrastructure.searching
         public Criteria<ItemToFilter> not_equal_to(PropertyType value)
         {
             return basic.not_equal_to(value);
+        }
+
+        public Criteria<ItemToFilter> create_using(Condition<ItemToFilter> condition)
+        {
+            return basic.create_using(condition);
         }
     }
 }
