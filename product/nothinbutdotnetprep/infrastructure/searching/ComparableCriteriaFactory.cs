@@ -41,9 +41,5 @@ namespace nothinbutdotnetprep.infrastructure.searching
             return basic.create_using(criteria);
         }
 
-        public NegatingCriteriaFactory<ItemToFilter, PropertyType> not
-        {
-            get { return basic.not; }
-        }
     }
 }

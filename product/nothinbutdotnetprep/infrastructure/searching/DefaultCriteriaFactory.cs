@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace nothinbutdotnetprep.infrastructure.searching
+﻿namespace nothinbutdotnetprep.infrastructure.searching
 {
     public class DefaultCriteriaFactory<ItemToFilter, PropertyType> : CriteriaFactory<ItemToFilter, PropertyType>
     {
@@ -21,13 +19,12 @@ namespace nothinbutdotnetprep.infrastructure.searching
             return create_using(new IsEqualToAny<PropertyType>(possible_values_to_equal));
         }
 
-
         public Criteria<ItemToFilter> create_using(Criteria<PropertyType> raw_criteria)
         {
             return new PropertyCriteria<ItemToFilter, PropertyType>(property_accessor, raw_criteria);
         }
 
-        public NegatingCriteriaFactory<ItemToFilter, PropertyType> not
+        public CriteriaFactory<ItemToFilter, PropertyType> not
         {
             get { return new NegatingCriteriaFactory<ItemToFilter, PropertyType>(this); }
         }

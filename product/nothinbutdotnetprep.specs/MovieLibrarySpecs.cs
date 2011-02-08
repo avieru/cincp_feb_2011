@@ -187,10 +187,8 @@ namespace nothinbutdotnetprep.specs
 
         It should_be_able_to_find_all_movies_published_by_pixar = () =>
         {
-            var criteria = Where<Movie>.has_a(x => x.production_studio)
+            var results = sut.all_movies().where(x => x.production_studio)
                 .equal_to(ProductionStudio.Pixar);
-
-            var results = sut.all_movies().all_items_matching(criteria);
 
             results.ShouldContainOnly(cars, a_bugs_life);
         };
@@ -209,7 +207,7 @@ namespace nothinbutdotnetprep.specs
         It should_be_able_to_find_all_movies_not_published_by_pixar = () =>
         {
             var criteria = Where<Movie>.has_a(x => x.production_studio)
-                .not.equal_to_any(ProductionStudio.Pixar);
+                .not.equal_to(ProductionStudio.Pixar);
 
             var results = sut.all_movies().all_items_matching(criteria);
 
@@ -218,8 +216,8 @@ namespace nothinbutdotnetprep.specs
 
         It should_be_able_to_find_all_movies_published_after_a_certain_year = () =>
         {
-            var criteria = Where<Movie>.has_an(x => x.date_published.Year)
-                                        .greater_than(2004);
+            var criteria = Where<Movie>.has_a(x => x.date_published.Year)
+                .greater_than(2004);
 
             var results = sut.all_movies().all_items_matching(criteria);
 
@@ -228,7 +226,7 @@ namespace nothinbutdotnetprep.specs
 
         It should_be_able_to_find_a_movie_published_in_a_certain_year = () =>
         {
-            var results = sut.all_movies().all_items_matching(Where<Movie>.has_an(x => x.date_published.Year
+            var results = sut.all_movies().all_items_matching(Where<Movie>.has_a(x => x.date_published.Year
                                                                   ).equal_to(1982));
 
             results.ShouldContainOnly(indiana_jones_and_the_temple_of_doom);
@@ -237,8 +235,8 @@ namespace nothinbutdotnetprep.specs
 
         It should_be_able_to_find_all_movies_published_between_a_certain_range_of_years = () =>
         {
-            var criteria = Where<Movie>.has_an(x => x.date_published.Year)
-                                        .between(1982,2003);
+            var criteria = Where<Movie>.has_a(x => x.date_published.Year)
+                .between(1982,2003);
 
             var results = sut.all_movies().all_items_matching(criteria);
 
