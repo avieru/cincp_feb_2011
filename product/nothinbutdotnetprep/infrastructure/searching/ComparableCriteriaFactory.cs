@@ -19,11 +19,10 @@ namespace nothinbutdotnetprep.infrastructure.searching
 
         public Criteria<ItemToFilter> between(PropertyType firstValue, PropertyType secondValue)
         {
-            //return  greater_than(firstValue).and(
 
             return
                 new AnonymousCriteria<ItemToFilter>(
-                    x => accessor(x).CompareTo(firstValue) > 0 && accessor(x).CompareTo(secondValue) < 0);
+                    x => accessor(x).CompareTo(firstValue) >= 0 && accessor(x).CompareTo(secondValue) <= 0);
         }
     }
 }

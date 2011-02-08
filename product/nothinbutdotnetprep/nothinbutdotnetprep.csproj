@@ -54,6 +54,7 @@
     <Compile Include="infrastructure\searching\ComparableCriteriaFactory.cs" />
     <Compile Include="infrastructure\searching\CriteriaFactory.cs" />
     <Compile Include="infrastructure\searching\DoesNotMatchAnything.cs" />
+    <Compile Include="infrastructure\searching\PropertyAccessor.cs" />
     <Compile Include="infrastructure\searching\Where.cs" />
     <Compile Include="infrastructure\searching\Criteria.cs" />
     <Compile Include="infrastructure\EnumerableExtensions.cs" />

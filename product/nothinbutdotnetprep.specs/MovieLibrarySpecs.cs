@@ -211,7 +211,7 @@ namespace nothinbutdotnetprep.specs
             var criteria = Where<Movie>.has_a(x => x.production_studio)
                 .not_equal_to(ProductionStudio.Pixar);
 
-            var results = sut.all_movies().all_items_matching(Movie.is_published_by(ProductionStudio.Pixar).not());
+            var results = sut.all_movies().all_items_matching(criteria);
 
             results.ShouldNotContain(cars, a_bugs_life);
         };
@@ -225,6 +225,15 @@ namespace nothinbutdotnetprep.specs
 
             results.ShouldContainOnly(the_ring, shrek, theres_something_about_mary);
         };
+
+        It should_be_able_to_find_a_movie_published_in_a_certain_year = () =>
+        {
+            var results = sut.all_movies().all_items_matching(Where<Movie>.has_an(x => x.date_published.Year
+                                                                  ).equal_to(1982));
+
+            results.ShouldContainOnly(indiana_jones_and_the_temple_of_doom);
+        }
+  
 
         It should_be_able_to_find_all_movies_published_between_a_certain_range_of_years = () =>
         {
@@ -240,7 +249,8 @@ namespace nothinbutdotnetprep.specs
         {
             var criteria = Where<Movie>.has_a(x => x.genre)
                 .equal_to(Genre.kids);
-            var results = sut.all_kid_movies();
+            var results = sut.all_movies().all_items_matching(criteria);
+
 
             results.ShouldContainOnly(a_bugs_life, shrek, cars);
         };
@@ -249,7 +259,7 @@ namespace nothinbutdotnetprep.specs
         {
             var criteria = Where<Movie>.has_a(x => x.genre)
                 .equal_to(Genre.action);
-            var results = sut.all_action_movies();
+            var results = sut.all_movies().all_items_matching(criteria);
 
             results.ShouldContainOnly(indiana_jones_and_the_temple_of_doom, pirates_of_the_carribean);
         };

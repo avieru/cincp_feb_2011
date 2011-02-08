@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace nothinbutdotnetprep.infrastructure.searching
 {
@@ -28,6 +27,5 @@ namespace nothinbutdotnetprep.infrastructure.searching
         {
             return equal_to(value).not();
         }
-
     }
 }

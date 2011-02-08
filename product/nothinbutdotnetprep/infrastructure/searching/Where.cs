@@ -2,8 +2,6 @@
 
 namespace nothinbutdotnetprep.infrastructure.searching
 {
-    public delegate PropertyType PropertyAccessor<ItemToFilter, PropertyType>(ItemToFilter item);
-
     public class Where<ItemToFilter>
     {
         public static ComparableCriteriaFactory<ItemToFilter, PropertyType> has_an<PropertyType>(
